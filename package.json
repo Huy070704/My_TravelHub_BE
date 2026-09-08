@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "my_travelhub_be",
   "version": "1.0.0",
   "main": "index.js",
@@ -14,6 +14,7 @@
   "description": "",
   "dependencies": {
     "@casl/ability": "^7.0.1",
+    "@neondatabase/serverless": "^1.1.0",
     "@prisma/client": "^6.19.3",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
@@ -23,6 +24,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
     "express": "^5.2.1",
     "express-rate-limit": "^8.7.0",
     "helmet": "^8.3.0",
@@ -53,6 +55,7 @@
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.17",
     "@types/swagger-ui-express": "^4.1.8",
+    "drizzle-kit": "^0.31.10",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
