@@ -1,0 +1,1594 @@
+{
+  "id": "65532217-8acb-46b0-af03-d5333983f9e2",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.Budgets": {
+      "name": "Budgets",
+      "schema": "",
+      "columns": {
+        "BudgetID": {
+          "name": "BudgetID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ItineraryID": {
+          "name": "ItineraryID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Category": {
+          "name": "Category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "PlannedAmountVND": {
+          "name": "PlannedAmountVND",
+          "type": "numeric(18, 0)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ActualAmountVND": {
+          "name": "ActualAmountVND",
+          "type": "numeric(18, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TransactionDate": {
+          "name": "TransactionDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Budgets_ItineraryID_Itineraries_ItineraryID_fk": {
+          "name": "Budgets_ItineraryID_Itineraries_ItineraryID_fk",
+          "tableFrom": "Budgets",
+          "tableTo": "Itineraries",
+          "columnsFrom": [
+            "ItineraryID"
+          ],
+          "columnsTo": [
+            "ItineraryID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ChatParticipants": {
+      "name": "ChatParticipants",
+      "schema": "",
+      "columns": {
+        "ChatParticipantID": {
+          "name": "ChatParticipantID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ChatID": {
+          "name": "ChatID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "UserID": {
+          "name": "UserID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "JoinedDate": {
+          "name": "JoinedDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ChatParticipants_ChatID_Chats_ChatID_fk": {
+          "name": "ChatParticipants_ChatID_Chats_ChatID_fk",
+          "tableFrom": "ChatParticipants",
+          "tableTo": "Chats",
+          "columnsFrom": [
+            "ChatID"
+          ],
+          "columnsTo": [
+            "ChatID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ChatParticipants_UserID_Users_UserID_fk": {
+          "name": "ChatParticipants_UserID_Users_UserID_fk",
+          "tableFrom": "ChatParticipants",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Unique_ChatID_UserID": {
+          "name": "Unique_ChatID_UserID",
+          "nullsNotDistinct": false,
+          "columns": [
+            "ChatID",
+            "UserID"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Chats": {
+      "name": "Chats",
+      "schema": "",
+      "columns": {
+        "ChatID": {
+          "name": "ChatID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ChatName": {
+          "name": "ChatName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "IsGroupChat": {
+          "name": "IsGroupChat",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "CreationDate": {
+          "name": "CreationDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Comments": {
+      "name": "Comments",
+      "schema": "",
+      "columns": {
+        "CommentID": {
+          "name": "CommentID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "PostID": {
+          "name": "PostID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "UserID": {
+          "name": "UserID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Content": {
+          "name": "Content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CommentDate": {
+          "name": "CommentDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Comments_PostID_Posts_PostID_fk": {
+          "name": "Comments_PostID_Posts_PostID_fk",
+          "tableFrom": "Comments",
+          "tableTo": "Posts",
+          "columnsFrom": [
+            "PostID"
+          ],
+          "columnsTo": [
+            "PostID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Comments_UserID_Users_UserID_fk": {
+          "name": "Comments_UserID_Users_UserID_fk",
+          "tableFrom": "Comments",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Destinations": {
+      "name": "Destinations",
+      "schema": "",
+      "columns": {
+        "DestinationID": {
+          "name": "DestinationID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CityProvince": {
+          "name": "CityProvince",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Rate": {
+          "name": "Rate",
+          "type": "numeric(18, 1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Image": {
+          "name": "Image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "KeyMain": {
+          "name": "KeyMain",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "EntranceFee": {
+          "name": "EntranceFee",
+          "type": "numeric(18, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "AccommodationCost": {
+          "name": "AccommodationCost",
+          "type": "numeric(18, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TotalTourCost": {
+          "name": "TotalTourCost",
+          "type": "numeric(18, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TourPricePerPerson": {
+          "name": "TourPricePerPerson",
+          "type": "numeric(18, 0)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.GuideApplications": {
+      "name": "GuideApplications",
+      "schema": "",
+      "columns": {
+        "ApplicationID": {
+          "name": "ApplicationID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "GuideID": {
+          "name": "GuideID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "PostID": {
+          "name": "PostID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Status": {
+          "name": "Status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Pending'"
+        },
+        "Message": {
+          "name": "Message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ProposedPriceVND": {
+          "name": "ProposedPriceVND",
+          "type": "numeric(18, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "AppliedDate": {
+          "name": "AppliedDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "GuideApplications_GuideID_Users_UserID_fk": {
+          "name": "GuideApplications_GuideID_Users_UserID_fk",
+          "tableFrom": "GuideApplications",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "GuideID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "GuideApplications_PostID_Posts_PostID_fk": {
+          "name": "GuideApplications_PostID_Posts_PostID_fk",
+          "tableFrom": "GuideApplications",
+          "tableTo": "Posts",
+          "columnsFrom": [
+            "PostID"
+          ],
+          "columnsTo": [
+            "PostID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Itineraries": {
+      "name": "Itineraries",
+      "schema": "",
+      "columns": {
+        "ItineraryID": {
+          "name": "ItineraryID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "UserID": {
+          "name": "UserID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TripName": {
+          "name": "TripName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "StartDate": {
+          "name": "StartDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "EndDate": {
+          "name": "EndDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TotalBudgetEstimatedVND": {
+          "name": "TotalBudgetEstimatedVND",
+          "type": "numeric(18, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Status": {
+          "name": "Status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Planned'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Itineraries_UserID_Users_UserID_fk": {
+          "name": "Itineraries_UserID_Users_UserID_fk",
+          "tableFrom": "Itineraries",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ItineraryDetails": {
+      "name": "ItineraryDetails",
+      "schema": "",
+      "columns": {
+        "DetailID": {
+          "name": "DetailID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ItineraryID": {
+          "name": "ItineraryID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "DestinationID": {
+          "name": "DestinationID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "DayNumber": {
+          "name": "DayNumber",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TimeSlot": {
+          "name": "TimeSlot",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ActivityDescription": {
+          "name": "ActivityDescription",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "EstimatedCostVND": {
+          "name": "EstimatedCostVND",
+          "type": "numeric(18, 0)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ItineraryDetails_ItineraryID_Itineraries_ItineraryID_fk": {
+          "name": "ItineraryDetails_ItineraryID_Itineraries_ItineraryID_fk",
+          "tableFrom": "ItineraryDetails",
+          "tableTo": "Itineraries",
+          "columnsFrom": [
+            "ItineraryID"
+          ],
+          "columnsTo": [
+            "ItineraryID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ItineraryDetails_DestinationID_Destinations_DestinationID_fk": {
+          "name": "ItineraryDetails_DestinationID_Destinations_DestinationID_fk",
+          "tableFrom": "ItineraryDetails",
+          "tableTo": "Destinations",
+          "columnsFrom": [
+            "DestinationID"
+          ],
+          "columnsTo": [
+            "DestinationID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Messages": {
+      "name": "Messages",
+      "schema": "",
+      "columns": {
+        "MessageID": {
+          "name": "MessageID",
+          "type": "bigserial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ChatID": {
+          "name": "ChatID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "SenderID": {
+          "name": "SenderID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Content": {
+          "name": "Content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "SentDate": {
+          "name": "SentDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Messages_ChatID_Chats_ChatID_fk": {
+          "name": "Messages_ChatID_Chats_ChatID_fk",
+          "tableFrom": "Messages",
+          "tableTo": "Chats",
+          "columnsFrom": [
+            "ChatID"
+          ],
+          "columnsTo": [
+            "ChatID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Messages_SenderID_Users_UserID_fk": {
+          "name": "Messages_SenderID_Users_UserID_fk",
+          "tableFrom": "Messages",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "SenderID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.PostLikes": {
+      "name": "PostLikes",
+      "schema": "",
+      "columns": {
+        "UserID": {
+          "name": "UserID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "PostID": {
+          "name": "PostID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "LikedDate": {
+          "name": "LikedDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "PostLikes_UserID_Users_UserID_fk": {
+          "name": "PostLikes_UserID_Users_UserID_fk",
+          "tableFrom": "PostLikes",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "PostLikes_PostID_Posts_PostID_fk": {
+          "name": "PostLikes_PostID_Posts_PostID_fk",
+          "tableFrom": "PostLikes",
+          "tableTo": "Posts",
+          "columnsFrom": [
+            "PostID"
+          ],
+          "columnsTo": [
+            "PostID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "PostLikes_UserID_PostID_pk": {
+          "name": "PostLikes_UserID_PostID_pk",
+          "columns": [
+            "UserID",
+            "PostID"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Posts": {
+      "name": "Posts",
+      "schema": "",
+      "columns": {
+        "PostID": {
+          "name": "PostID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "UserID": {
+          "name": "UserID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ItineraryID": {
+          "name": "ItineraryID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PostType": {
+          "name": "PostType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Title": {
+          "name": "Title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Content": {
+          "name": "Content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "LikesCount": {
+          "name": "LikesCount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "IsHidden": {
+          "name": "IsHidden",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "CreationDate": {
+          "name": "CreationDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Posts_UserID_Users_UserID_fk": {
+          "name": "Posts_UserID_Users_UserID_fk",
+          "tableFrom": "Posts",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Posts_ItineraryID_Itineraries_ItineraryID_fk": {
+          "name": "Posts_ItineraryID_Itineraries_ItineraryID_fk",
+          "tableFrom": "Posts",
+          "tableTo": "Itineraries",
+          "columnsFrom": [
+            "ItineraryID"
+          ],
+          "columnsTo": [
+            "ItineraryID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Reports": {
+      "name": "Reports",
+      "schema": "",
+      "columns": {
+        "ReportID": {
+          "name": "ReportID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "PostID": {
+          "name": "PostID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ReporterID": {
+          "name": "ReporterID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Reason": {
+          "name": "Reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Status": {
+          "name": "Status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Pending'"
+        },
+        "ReportDate": {
+          "name": "ReportDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Reports_PostID_Posts_PostID_fk": {
+          "name": "Reports_PostID_Posts_PostID_fk",
+          "tableFrom": "Reports",
+          "tableTo": "Posts",
+          "columnsFrom": [
+            "PostID"
+          ],
+          "columnsTo": [
+            "PostID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "Reports_ReporterID_Users_UserID_fk": {
+          "name": "Reports_ReporterID_Users_UserID_fk",
+          "tableFrom": "Reports",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "ReporterID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.TourBookings": {
+      "name": "TourBookings",
+      "schema": "",
+      "columns": {
+        "BookingID": {
+          "name": "BookingID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "UserID": {
+          "name": "UserID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TourID": {
+          "name": "TourID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TourTitle": {
+          "name": "TourTitle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Destination": {
+          "name": "Destination",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ImageUrl": {
+          "name": "ImageUrl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "DepartureDate": {
+          "name": "DepartureDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "FullName": {
+          "name": "FullName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Phone": {
+          "name": "Phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Email": {
+          "name": "Email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Guests": {
+          "name": "Guests",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TotalPriceVND": {
+          "name": "TotalPriceVND",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "BookingDate": {
+          "name": "BookingDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "Status": {
+          "name": "Status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "TourBookings_UserID_Users_UserID_fk": {
+          "name": "TourBookings_UserID_Users_UserID_fk",
+          "tableFrom": "TourBookings",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "TourBookings_TourID_Tours_TourID_fk": {
+          "name": "TourBookings_TourID_Tours_TourID_fk",
+          "tableFrom": "TourBookings",
+          "tableTo": "Tours",
+          "columnsFrom": [
+            "TourID"
+          ],
+          "columnsTo": [
+            "TourID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.TourGuideProfiles": {
+      "name": "TourGuideProfiles",
+      "schema": "",
+      "columns": {
+        "ProfileID": {
+          "name": "ProfileID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "UserID": {
+          "name": "UserID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "DateOfBirth": {
+          "name": "DateOfBirth",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Gender": {
+          "name": "Gender",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Phone": {
+          "name": "Phone",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Address": {
+          "name": "Address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Experience": {
+          "name": "Experience",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Languages": {
+          "name": "Languages",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Locations": {
+          "name": "Locations",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Bio": {
+          "name": "Bio",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TourCategories": {
+          "name": "TourCategories",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "IdFrontUrl": {
+          "name": "IdFrontUrl",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "IdBackUrl": {
+          "name": "IdBackUrl",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CertUrl": {
+          "name": "CertUrl",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "GuideAvatarUrl": {
+          "name": "GuideAvatarUrl",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "IsVerified": {
+          "name": "IsVerified",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Pending'"
+        },
+        "AdminNote": {
+          "name": "AdminNote",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "TourGuideProfiles_UserID_Users_UserID_fk": {
+          "name": "TourGuideProfiles_UserID_Users_UserID_fk",
+          "tableFrom": "TourGuideProfiles",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Tours": {
+      "name": "Tours",
+      "schema": "",
+      "columns": {
+        "TourID": {
+          "name": "TourID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Title": {
+          "name": "Title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Destination": {
+          "name": "Destination",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "DepartureLocation": {
+          "name": "DepartureLocation",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "DepartureDate": {
+          "name": "DepartureDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "DurationDays": {
+          "name": "DurationDays",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "DurationText": {
+          "name": "DurationText",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PriceVND": {
+          "name": "PriceVND",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ImageUrl": {
+          "name": "ImageUrl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "NumberOfBookings": {
+          "name": "NumberOfBookings",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "ProviderID": {
+          "name": "ProviderID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Tours_ProviderID_Users_UserID_fk": {
+          "name": "Tours_ProviderID_Users_UserID_fk",
+          "tableFrom": "Tours",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "ProviderID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.TravelCompanions": {
+      "name": "TravelCompanions",
+      "schema": "",
+      "columns": {
+        "CompanionID": {
+          "name": "CompanionID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "PostID": {
+          "name": "PostID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "RequesterID": {
+          "name": "RequesterID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ReceiverID": {
+          "name": "ReceiverID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Status": {
+          "name": "Status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Pending'"
+        },
+        "DateRequested": {
+          "name": "DateRequested",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "TravelCompanions_PostID_Posts_PostID_fk": {
+          "name": "TravelCompanions_PostID_Posts_PostID_fk",
+          "tableFrom": "TravelCompanions",
+          "tableTo": "Posts",
+          "columnsFrom": [
+            "PostID"
+          ],
+          "columnsTo": [
+            "PostID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "TravelCompanions_RequesterID_Users_UserID_fk": {
+          "name": "TravelCompanions_RequesterID_Users_UserID_fk",
+          "tableFrom": "TravelCompanions",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "RequesterID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "TravelCompanions_ReceiverID_Users_UserID_fk": {
+          "name": "TravelCompanions_ReceiverID_Users_UserID_fk",
+          "tableFrom": "TravelCompanions",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "ReceiverID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.UserPreferences": {
+      "name": "UserPreferences",
+      "schema": "",
+      "columns": {
+        "PreferenceID": {
+          "name": "PreferenceID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "UserID": {
+          "name": "UserID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "PreferredBudgetVND": {
+          "name": "PreferredBudgetVND",
+          "type": "numeric(18, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TravelStyle": {
+          "name": "TravelStyle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "FavoriteActivities": {
+          "name": "FavoriteActivities",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "MaxDurationDays": {
+          "name": "MaxDurationDays",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PreferredDestinations": {
+          "name": "PreferredDestinations",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UserPreferences_UserID_Users_UserID_fk": {
+          "name": "UserPreferences_UserID_Users_UserID_fk",
+          "tableFrom": "UserPreferences",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Users": {
+      "name": "Users",
+      "schema": "",
+      "columns": {
+        "UserID": {
+          "name": "UserID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Username": {
+          "name": "Username",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Email": {
+          "name": "Email",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "PasswordHash": {
+          "name": "PasswordHash",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "GoogleID": {
+          "name": "GoogleID",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "AvatarURL": {
+          "name": "AvatarURL",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "FullName": {
+          "name": "FullName",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "DateOfBirth": {
+          "name": "DateOfBirth",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "StudentCode": {
+          "name": "StudentCode",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Gender": {
+          "name": "Gender",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "RefreshToken": {
+          "name": "RefreshToken",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "RefreshTokenExpiryTime": {
+          "name": "RefreshTokenExpiryTime",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "RegistrationDate": {
+          "name": "RegistrationDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "LastOnline": {
+          "name": "LastOnline",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Role": {
+          "name": "Role",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Customer'"
+        },
+        "IsPremium": {
+          "name": "IsPremium",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "PremiumExpiryDate": {
+          "name": "PremiumExpiryDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "IsBlocked": {
+          "name": "IsBlocked",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "AiGenerationCount": {
+          "name": "AiGenerationCount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "LastAiGenerationDate": {
+          "name": "LastAiGenerationDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TravelPoints": {
+          "name": "TravelPoints",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "UserCode": {
+          "name": "UserCode",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Users_Username_unique": {
+          "name": "Users_Username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Username"
+          ]
+        },
+        "Users_Email_unique": {
+          "name": "Users_Email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

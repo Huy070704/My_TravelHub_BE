@@ -1,273 +1,275 @@
-# Hệ thống Database Cập Nhật (Theo Code EF Core Models)
+# Hệ thống Database Cập Nhật (Theo Code Drizzle ORM Models)
 
-Dưới đây là sơ đồ cơ sở dữ liệu (Database Schema) đã được cập nhật lại khớp 100% với các Models và DbContext hiện tại của dự án TravelHub.
+Dưới đây là sơ đồ cơ sở dữ liệu (Database Schema) đã được cập nhật lại khớp 100% với các schema hiện tại của dự án TravelHub, sử dụng PostgreSQL và Drizzle ORM.
 
 ```sql
--- 1. Bảng Users (Đã cập nhật các trường mới như Role, IsPremium, RefreshToken, ...)
+-- 1. Bảng Users
 CREATE TABLE Users (
-    UserID INT IDENTITY(1,1) PRIMARY KEY,
-    Username NVARCHAR(50) NOT NULL UNIQUE,
-    Email NVARCHAR(100) NOT NULL UNIQUE,
-    PasswordHash NVARCHAR(255) NULL, 
-    GoogleID NVARCHAR(100) NULL,     
-    AvatarURL NVARCHAR(500) NULL,    
-    FullName NVARCHAR(100) NULL,
-    DateOfBirth DATETIME NULL,
-    StudentCode NVARCHAR(20) NULL,
-    Gender NVARCHAR(10) NULL,
-    RefreshToken NVARCHAR(255) NULL,
-    RefreshTokenExpiryTime DATETIME NULL,
-    RegistrationDate DATETIME DEFAULT GETDATE(),
-    LastOnline DATETIME NULL,
-    Role NVARCHAR(20) DEFAULT 'Customer',
-    IsPremium BIT DEFAULT 0,
-    PremiumExpiryDate DATETIME NULL,
-    IsBlocked BIT DEFAULT 0,
+    UserID UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    Username VARCHAR(50) NOT NULL UNIQUE,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    PasswordHash VARCHAR(255), 
+    GoogleID VARCHAR(100),     
+    AvatarURL VARCHAR(500),    
+    FullName VARCHAR(100),
+    DateOfBirth TIMESTAMP,
+    StudentCode VARCHAR(20),
+    Gender VARCHAR(10),
+    RefreshToken VARCHAR(255),
+    RefreshTokenExpiryTime TIMESTAMP,
+    RegistrationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    LastOnline TIMESTAMP,
+    Role VARCHAR(20) DEFAULT 'Customer',
+    IsPremium BOOLEAN DEFAULT FALSE,
+    PremiumExpiryDate TIMESTAMP,
+    IsBlocked BOOLEAN DEFAULT FALSE,
     AiGenerationCount INT DEFAULT 0,
-    LastAiGenerationDate DATETIME NULL,
+    LastAiGenerationDate TIMESTAMP,
     TravelPoints INT DEFAULT 0,
-    UserCode NVARCHAR(20) NULL
+    UserCode VARCHAR(20)
 );
 
--- 1.5 Bảng TourGuideProfiles (Hồ sơ Hướng dẫn viên - Mới)
+-- 2 Bảng TourGuideProfiles
 CREATE TABLE TourGuideProfiles (
-    ProfileID INT IDENTITY(1,1) PRIMARY KEY,
-    UserID INT NOT NULL,
-    DateOfBirth DATETIME NULL,
-    Gender NVARCHAR(20) NULL,
-    Phone NVARCHAR(20) NULL,
-    Address NVARCHAR(255) NULL,
-    Experience NVARCHAR(20) NULL,
-    Languages NVARCHAR(255) NULL,
-    Locations NVARCHAR(500) NULL,
-    Bio NVARCHAR(1000) NULL,
-    TourCategories NVARCHAR(500) NULL,
-    IdFrontUrl NVARCHAR(500) NULL,
-    IdBackUrl NVARCHAR(500) NULL,
-    CertUrl NVARCHAR(500) NULL,
-    GuideAvatarUrl NVARCHAR(500) NULL,
-    IsVerified NVARCHAR(20) DEFAULT 'Pending',
-    AdminNote NVARCHAR(1000) NULL,
-    CreatedAt DATETIME DEFAULT GETDATE(),
+    ProfileID SERIAL PRIMARY KEY,
+    UserID UUID NOT NULL,
+    DateOfBirth TIMESTAMP,
+    Gender VARCHAR(20),
+    Phone VARCHAR(20),
+    Address VARCHAR(255),
+    Experience VARCHAR(20),
+    Languages VARCHAR(255),
+    Locations VARCHAR(500),
+    Bio TEXT,
+    TourCategories VARCHAR(500),
+    IdFrontUrl VARCHAR(500),
+    IdBackUrl VARCHAR(500),
+    CertUrl VARCHAR(500),
+    GuideAvatarUrl VARCHAR(500),
+    IsVerified VARCHAR(20) DEFAULT 'Pending',
+    AdminNote TEXT,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE
 );
 
--- 2. Bảng UserPreferences
+-- 3. Bảng UserPreferences
 CREATE TABLE UserPreferences (
-    PreferenceID INT IDENTITY(1,1) PRIMARY KEY,
-    UserID INT NOT NULL,
-    PreferredBudgetVND DECIMAL(18, 0) NULL,
-    TravelStyle NVARCHAR(MAX) NULL,
-    FavoriteActivities NVARCHAR(MAX) NULL,
-    MaxDurationDays INT NULL,
-    PreferredDestinations NVARCHAR(MAX) NULL,
+    PreferenceID SERIAL PRIMARY KEY,
+    UserID UUID NOT NULL,
+    PreferredBudgetVND DECIMAL(18, 0),
+    TravelStyle TEXT,
+    FavoriteActivities TEXT,
+    MaxDurationDays INT,
+    PreferredDestinations TEXT,
     
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
--- 3. Bảng Destinations
+-- 4. Bảng Destinations
 CREATE TABLE Destinations (
-    DestinationID INT IDENTITY(1,1) PRIMARY KEY,
-    Name NVARCHAR(MAX) NOT NULL,
-    CityProvince NVARCHAR(MAX) NOT NULL,
-    Description NVARCHAR(MAX) NULL,
-    Rate DECIMAL(18, 1) NULL,
-    Image NVARCHAR(MAX) NULL,
-    KeyMain NVARCHAR(MAX) NULL,
-    EntranceFee DECIMAL(18, 0) NULL,
-    AccommodationCost DECIMAL(18, 0) NULL,
-    TotalTourCost DECIMAL(18, 0) NULL,
-    TourPricePerPerson DECIMAL(18, 0) NULL
+    DestinationID SERIAL PRIMARY KEY,
+    Name TEXT NOT NULL,
+    CityProvince TEXT NOT NULL,
+    Description TEXT,
+    Rate DECIMAL(18, 1),
+    Image TEXT,
+    KeyMain TEXT,
+    EntranceFee DECIMAL(18, 0),
+    AccommodationCost DECIMAL(18, 0),
+    TotalTourCost DECIMAL(18, 0),
+    TourPricePerPerson DECIMAL(18, 0)
 );
 
--- 4. Bảng Itineraries
+-- 5. Bảng Itineraries
 CREATE TABLE Itineraries (
-    ItineraryID INT IDENTITY(1,1) PRIMARY KEY,
-    UserID INT NOT NULL,
-    TripName NVARCHAR(MAX) NOT NULL,
-    StartDate DATETIME NOT NULL,
-    EndDate DATETIME NOT NULL,
-    TotalBudgetEstimatedVND DECIMAL(18, 0) NULL,
-    Status NVARCHAR(MAX) DEFAULT 'Planned',
+    ItineraryID SERIAL PRIMARY KEY,
+    Slug VARCHAR(255) NOT NULL UNIQUE,
+    UserID UUID NOT NULL,
+    TripName TEXT NOT NULL,
+    StartDate TIMESTAMP NOT NULL,
+    EndDate TIMESTAMP NOT NULL,
+    TotalBudgetEstimatedVND DECIMAL(18, 0),
+    Status TEXT DEFAULT 'Planned',
     
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
--- 5. Bảng ItineraryDetails
+-- 6. Bảng ItineraryDetails
 CREATE TABLE ItineraryDetails (
-    DetailID INT IDENTITY(1,1) PRIMARY KEY,
+    DetailID SERIAL PRIMARY KEY,
     ItineraryID INT NOT NULL,
     DestinationID INT NOT NULL,
     DayNumber INT NOT NULL,
-    TimeSlot NVARCHAR(MAX) NULL,
-    ActivityDescription NVARCHAR(MAX) NULL,
-    EstimatedCostVND DECIMAL(18, 0) NULL,
+    TimeSlot TEXT,
+    ActivityDescription TEXT,
+    EstimatedCostVND DECIMAL(18, 0),
     
     FOREIGN KEY (ItineraryID) REFERENCES Itineraries(ItineraryID),
     FOREIGN KEY (DestinationID) REFERENCES Destinations(DestinationID)
 );
 
--- 6. Bảng Budgets
+-- 7. Bảng Budgets
 CREATE TABLE Budgets (
-    BudgetID INT IDENTITY(1,1) PRIMARY KEY,
+    BudgetID SERIAL PRIMARY KEY,
     ItineraryID INT NOT NULL,
-    Category NVARCHAR(MAX) NOT NULL,
+    Category TEXT NOT NULL,
     PlannedAmountVND DECIMAL(18, 0) NOT NULL,
-    ActualAmountVND DECIMAL(18, 0) NULL,
-    TransactionDate DATETIME NULL,
-    Notes NVARCHAR(MAX) NULL,
+    ActualAmountVND DECIMAL(18, 0),
+    TransactionDate TIMESTAMP,
+    Notes TEXT,
     
     FOREIGN KEY (ItineraryID) REFERENCES Itineraries(ItineraryID)
 );
 
--- 7. Bảng Posts
+-- 8. Bảng Posts
 CREATE TABLE Posts (
-    PostID INT IDENTITY(1,1) PRIMARY KEY,
-    UserID INT NOT NULL,
-    ItineraryID INT NULL,
-    PostType NVARCHAR(MAX) NOT NULL,
-    Title NVARCHAR(MAX) NOT NULL,
-    Content NVARCHAR(MAX) NULL,
+    PostID SERIAL PRIMARY KEY,
+    Slug VARCHAR(255) NOT NULL UNIQUE,
+    UserID UUID NOT NULL,
+    ItineraryID INT,
+    PostType TEXT NOT NULL,
+    Title TEXT NOT NULL,
+    Content TEXT,
     LikesCount INT DEFAULT 0,
-    IsHidden BIT DEFAULT 0,
-    CreationDate DATETIME DEFAULT GETDATE(),
+    IsHidden BOOLEAN DEFAULT FALSE,
+    CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (ItineraryID) REFERENCES Itineraries(ItineraryID)
 );
 
--- 7.5 Bảng PostLikes (Mới)
+-- 9 Bảng PostLikes
 CREATE TABLE PostLikes (
-    UserID INT NOT NULL,
+    UserID UUID NOT NULL,
     PostID INT NOT NULL,
-    LikedDate DATETIME DEFAULT GETDATE(),
+    LikedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     PRIMARY KEY (UserID, PostID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (PostID) REFERENCES Posts(PostID) ON DELETE CASCADE
 );
 
--- 8. Bảng Comments
+-- 10. Bảng Comments
 CREATE TABLE Comments (
-    CommentID INT IDENTITY(1,1) PRIMARY KEY,
+    CommentID SERIAL PRIMARY KEY,
     PostID INT NOT NULL,
-    UserID INT NOT NULL,
-    Content NVARCHAR(MAX) NULL,
-    CommentDate DATETIME DEFAULT GETDATE(),
+    UserID UUID NOT NULL,
+    Content TEXT,
+    CommentDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     FOREIGN KEY (PostID) REFERENCES Posts(PostID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
--- 9. Bảng Chats
+-- 11. Bảng Chats
 CREATE TABLE Chats (
-    ChatID INT IDENTITY(1,1) PRIMARY KEY,
-    ChatName NVARCHAR(MAX) NULL,
-    IsGroupChat BIT DEFAULT 0,
-    CreationDate DATETIME DEFAULT GETDATE()
+    ChatID UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    ChatName TEXT,
+    IsGroupChat BOOLEAN DEFAULT FALSE,
+    CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 10. Bảng ChatParticipants
+-- 12. Bảng ChatParticipants
 CREATE TABLE ChatParticipants (
-    ChatParticipantID INT IDENTITY(1,1) PRIMARY KEY,
-    ChatID INT NOT NULL,
-    UserID INT NOT NULL,
-    JoinedDate DATETIME DEFAULT GETDATE(),
+    ChatID UUID NOT NULL,
+    UserID UUID NOT NULL,
+    JoinedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
-    UNIQUE (ChatID, UserID), 
+    PRIMARY KEY (ChatID, UserID),
     FOREIGN KEY (ChatID) REFERENCES Chats(ChatID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
--- 11. Bảng Messages
+-- 13. Bảng Messages
 CREATE TABLE Messages (
-    MessageID BIGINT IDENTITY(1,1) PRIMARY KEY,
-    ChatID INT NOT NULL,
-    SenderID INT NOT NULL,
-    Content NVARCHAR(MAX) NULL,
-    SentDate DATETIME DEFAULT GETDATE(),
+    MessageID UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    ChatID UUID NOT NULL,
+    SenderID UUID NOT NULL,
+    Content TEXT,
+    SentDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     FOREIGN KEY (ChatID) REFERENCES Chats(ChatID),
     FOREIGN KEY (SenderID) REFERENCES Users(UserID)
 );
 
--- 12. Bảng TravelCompanions
+-- 14. Bảng TravelCompanions
 CREATE TABLE TravelCompanions (
-    CompanionID INT IDENTITY(1,1) PRIMARY KEY,
-    PostID INT NULL,
-    RequesterID INT NOT NULL,
-    ReceiverID INT NOT NULL,
-    Status NVARCHAR(MAX) DEFAULT 'Pending',
-    DateRequested DATETIME DEFAULT GETDATE(),
+    CompanionID SERIAL PRIMARY KEY,
+    PostID INT,
+    RequesterID UUID NOT NULL,
+    ReceiverID UUID NOT NULL,
+    Status TEXT DEFAULT 'Pending',
+    DateRequested TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     FOREIGN KEY (PostID) REFERENCES Posts(PostID),
     FOREIGN KEY (RequesterID) REFERENCES Users(UserID),
     FOREIGN KEY (ReceiverID) REFERENCES Users(UserID)
 );
 
--- 13. Bảng Tours (Mới)
+-- 15. Bảng Tours
 CREATE TABLE Tours (
-    TourID INT IDENTITY(1,1) PRIMARY KEY,
-    Title NVARCHAR(255) NOT NULL,
-    Destination NVARCHAR(100) NOT NULL,
-    DepartureLocation NVARCHAR(100) NOT NULL,
-    DepartureDate DATETIME NOT NULL,
+    TourID SERIAL PRIMARY KEY,
+    Slug VARCHAR(255) NOT NULL UNIQUE,
+    Title VARCHAR(255) NOT NULL,
+    Destination VARCHAR(100) NOT NULL,
+    DepartureLocation VARCHAR(100) NOT NULL,
+    DepartureDate TIMESTAMP NOT NULL,
     DurationDays INT NOT NULL,
-    DurationText NVARCHAR(50) NULL,
+    DurationText VARCHAR(50),
     PriceVND DECIMAL(18, 2) NOT NULL,
-    ImageUrl NVARCHAR(MAX) NULL,
-    Description NVARCHAR(MAX) NULL,
+    ImageUrl TEXT,
+    Description TEXT,
     NumberOfBookings INT DEFAULT 0,
-    ProviderID INT NULL,
+    ProviderID UUID,
     
     FOREIGN KEY (ProviderID) REFERENCES Users(UserID)
 );
 
--- 14. Bảng TourBookings (Mới)
+-- 16. Bảng TourBookings
 CREATE TABLE TourBookings (
-    BookingID INT IDENTITY(1,1) PRIMARY KEY,
-    UserID INT NOT NULL,
+    BookingID UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    UserID UUID NOT NULL,
     TourID INT NOT NULL,
-    TourTitle NVARCHAR(MAX) NOT NULL,
-    Destination NVARCHAR(MAX) NOT NULL,
-    ImageUrl NVARCHAR(MAX) NULL,
-    DepartureDate DATETIME NOT NULL,
-    FullName NVARCHAR(MAX) NOT NULL,
-    Phone NVARCHAR(MAX) NOT NULL,
-    Email NVARCHAR(MAX) NULL,
-    Notes NVARCHAR(MAX) NULL,
+    TourTitle TEXT NOT NULL,
+    Destination TEXT NOT NULL,
+    ImageUrl TEXT,
+    DepartureDate TIMESTAMP NOT NULL,
+    FullName TEXT NOT NULL,
+    Phone TEXT NOT NULL,
+    Email TEXT,
+    Notes TEXT,
     Guests INT NOT NULL,
     TotalPriceVND DECIMAL(18, 2) NOT NULL,
-    BookingDate DATETIME DEFAULT GETDATE(),
-    Status NVARCHAR(MAX) NOT NULL,
+    BookingDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Status TEXT NOT NULL,
     
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (TourID) REFERENCES Tours(TourID)
 );
 
--- 15. Bảng Reports (Mới)
+-- 17. Bảng Reports
 CREATE TABLE Reports (
-    ReportID INT IDENTITY(1,1) PRIMARY KEY,
+    ReportID SERIAL PRIMARY KEY,
     PostID INT NOT NULL,
-    ReporterID INT NOT NULL,
-    Reason NVARCHAR(MAX) NOT NULL,
-    Status NVARCHAR(MAX) DEFAULT 'Pending',
-    ReportDate DATETIME DEFAULT GETDATE(),
+    ReporterID UUID NOT NULL,
+    Reason TEXT NOT NULL,
+    Status TEXT DEFAULT 'Pending',
+    ReportDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     FOREIGN KEY (PostID) REFERENCES Posts(PostID) ON DELETE CASCADE,
     FOREIGN KEY (ReporterID) REFERENCES Users(UserID)
 );
 
--- 16. Bảng GuideApplications (Mới)
+-- 18. Bảng GuideApplications
 CREATE TABLE GuideApplications (
-    ApplicationID INT IDENTITY(1,1) PRIMARY KEY,
-    GuideID INT NOT NULL,
+    ApplicationID SERIAL PRIMARY KEY,
+    GuideID UUID NOT NULL,
     PostID INT NOT NULL,
-    Status NVARCHAR(MAX) DEFAULT 'Pending',
-    Message NVARCHAR(MAX) NULL,
-    ProposedPriceVND DECIMAL(18, 0) NULL,
-    AppliedDate DATETIME DEFAULT GETDATE(),
+    Status TEXT DEFAULT 'Pending',
+    Message TEXT,
+    ProposedPriceVND DECIMAL(18, 0),
+    AppliedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     FOREIGN KEY (GuideID) REFERENCES Users(UserID),
     FOREIGN KEY (PostID) REFERENCES Posts(PostID) ON DELETE CASCADE
