@@ -1,7 +1,7 @@
 import { db } from './index';
-import { users } from '../modules/users/models/user.schema';
-import { destinations } from '../modules/destinations/models/destination.schema';
-import { tours } from '../modules/tours/models/tour.schema';
+import { users } from '../modules/users/user.schema';
+import { destinations } from '../modules/destinations/destination.schema';
+import { tours } from '../modules/tours/tour.schema';
 
 async function main() {
   console.log('Seeding database...');

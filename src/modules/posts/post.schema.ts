@@ -1,6 +1,6 @@
 import { pgTable, serial, integer, text, timestamp, boolean, varchar, uuid } from 'drizzle-orm/pg-core';
-import { users } from '../../users/models/user.schema';
-import { itineraries } from '../../itineraries/models/itinerary.schema';
+import { users } from '../users/user.schema';
+import { itineraries } from '../itineraries/itinerary.schema';
 
 export const posts = pgTable('Posts', {
   postID: serial('PostID').primaryKey(),

@@ -1,6 +1,6 @@
 import { pgTable, timestamp, primaryKey, uuid } from 'drizzle-orm/pg-core';
 import { chats } from './chat.schema';
-import { users } from '../../users/models/user.schema';
+import { users } from '../users/user.schema';
 
 export const chatParticipants = pgTable('ChatParticipants', {
   chatID: uuid('ChatID').notNull().references(() => chats.chatID),

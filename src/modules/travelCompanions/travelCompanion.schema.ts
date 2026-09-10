@@ -1,6 +1,6 @@
 import { pgTable, serial, integer, text, timestamp, uuid } from 'drizzle-orm/pg-core';
-import { posts } from '../../posts/models/post.schema';
-import { users } from '../../users/models/user.schema';
+import { posts } from '../posts/post.schema';
+import { users } from '../users/user.schema';
 
 export const travelCompanions = pgTable('TravelCompanions', {
   companionID: serial('CompanionID').primaryKey(),

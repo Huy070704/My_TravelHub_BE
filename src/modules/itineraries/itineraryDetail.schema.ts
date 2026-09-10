@@ -1,6 +1,6 @@
 import { pgTable, serial, integer, text, decimal } from 'drizzle-orm/pg-core';
 import { itineraries } from './itinerary.schema';
-import { destinations } from '../../destinations/models/destination.schema';
+import { destinations } from '../destinations/destination.schema';
 
 export const itineraryDetails = pgTable('ItineraryDetails', {
   detailID: serial('DetailID').primaryKey(),

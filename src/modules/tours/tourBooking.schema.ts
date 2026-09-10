@@ -1,5 +1,5 @@
 import { pgTable, timestamp, integer, text, decimal, uuid } from 'drizzle-orm/pg-core';
-import { users } from '../../users/models/user.schema';
+import { users } from '../users/user.schema';
 import { tours } from './tour.schema';
 
 export const tourBookings = pgTable('TourBookings', {

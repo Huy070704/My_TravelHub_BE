@@ -1,6 +1,6 @@
 import { pgTable, serial, integer, text, decimal, timestamp, uuid } from 'drizzle-orm/pg-core';
-import { users } from '../../users/models/user.schema';
-import { posts } from '../../posts/models/post.schema';
+import { users } from '../users/user.schema';
+import { posts } from '../posts/post.schema';
 
 export const guideApplications = pgTable('GuideApplications', {
   applicationID: serial('ApplicationID').primaryKey(),
