@@ -11,8 +11,6 @@ export const users = pgTable('Users', {
   dateOfBirth: timestamp('DateOfBirth'),
   studentCode: varchar('StudentCode', { length: 20 }),
   gender: varchar('Gender', { length: 10 }),
-  refreshToken: varchar('RefreshToken', { length: 255 }),
-  refreshTokenExpiryTime: timestamp('RefreshTokenExpiryTime'),
   registrationDate: timestamp('RegistrationDate').defaultNow(),
   lastOnline: timestamp('LastOnline'),
   role: varchar('Role', { length: 20 }).default('Customer'),

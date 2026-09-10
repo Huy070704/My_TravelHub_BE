@@ -1,5 +1,5 @@
 import { pgTable, serial, timestamp, varchar, text, uuid } from 'drizzle-orm/pg-core';
-import { users } from './user.schema';
+import { users } from '../users/user.schema';
 
 export const tourGuideProfiles = pgTable('TourGuideProfiles', {
   profileID: serial('ProfileID').primaryKey(),

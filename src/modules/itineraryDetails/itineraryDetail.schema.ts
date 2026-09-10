@@ -1,5 +1,5 @@
 import { pgTable, serial, integer, text, decimal } from 'drizzle-orm/pg-core';
-import { itineraries } from './itinerary.schema';
+import { itineraries } from '../itineraries/itinerary.schema';
 import { destinations } from '../destinations/destination.schema';
 
 export const itineraryDetails = pgTable('ItineraryDetails', {

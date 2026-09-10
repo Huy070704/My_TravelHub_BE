@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
-import { chats } from './chat.schema';
+import { chats } from '../chats/chat.schema';
 import { users } from '../users/user.schema';
 
 export const messages = pgTable('Messages', {
