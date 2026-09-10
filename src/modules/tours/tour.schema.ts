@@ -1,5 +1,5 @@
 import { pgTable, serial, varchar, timestamp, integer, decimal, text, uuid } from 'drizzle-orm/pg-core';
-import { users } from '../../users/models/user.schema';
+import { users } from '../users/user.schema';
 
 export const tours = pgTable('Tours', {
   tourID: serial('TourID').primaryKey(),

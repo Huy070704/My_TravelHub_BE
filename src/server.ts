@@ -1,7 +1,8 @@
-﻿import express, { Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import apiRoutes from './routes';
 
 dotenv.config();
 
@@ -17,6 +18,9 @@ app.use(express.json());
 app.get('/api/health', (req: Request, res: Response) => {
   res.json({ status: 'OK', message: 'TravelHub API is running' });
 });
+
+// Mount modular routes
+app.use('/api', apiRoutes);
 
 // Start server
 app.listen(port, () => {
