@@ -1,5 +1,5 @@
 import { pgTable, serial, integer, text, decimal, timestamp } from 'drizzle-orm/pg-core';
-import { itineraries } from './itinerary.schema';
+import { itineraries } from '../itineraries/itinerary.schema';
 
 export const budgets = pgTable('Budgets', {
   budgetID: serial('BudgetID').primaryKey(),

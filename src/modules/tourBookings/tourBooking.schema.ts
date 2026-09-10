@@ -1,6 +1,6 @@
 import { pgTable, timestamp, integer, text, decimal, uuid } from 'drizzle-orm/pg-core';
 import { users } from '../users/user.schema';
-import { tours } from './tour.schema';
+import { tours } from '../tours/tour.schema';
 
 export const tourBookings = pgTable('TourBookings', {
   bookingID: uuid('BookingID').defaultRandom().primaryKey(),
