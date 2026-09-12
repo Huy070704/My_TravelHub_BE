@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import authRouter from '../modules/auths/auth.route';
 import { userRoutes } from '../modules/users/users.routes';
 import { refreshTokensRoutes } from '../modules/refreshTokens/refreshTokens.routes';
 import { tourGuideProfilesRoutes } from '../modules/tourGuideProfiles/tourGuideProfiles.routes';
@@ -22,6 +23,7 @@ import { guideApplicationsRoutes } from '../modules/guideApplications/guideAppli
 const router = Router();
 
 // Mount all module routes here
+router.use('/auth', authRouter);
 router.use('/users', userRoutes);
 router.use('/refresh-tokens', refreshTokensRoutes);
 router.use('/tour-guide-profiles', tourGuideProfilesRoutes);
