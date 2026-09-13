@@ -180,3 +180,13 @@ export async function refreshService(token: string) {
 
   return tokens;
 }
+
+// ---------------------------------------------
+// 4. CHỨC NĂNG LOGOUT
+// ---------------------------------------------
+export async function logoutService(refreshToken: string) {
+  if (!refreshToken) return;
+
+  // Xóa refresh token khỏi bảng refresh_tokens
+  await db.delete(refreshTokens).where(eq(refreshTokens.token, refreshToken));
+}
