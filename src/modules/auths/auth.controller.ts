@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { z } from "zod";
-import { registerService, loginService, refreshService } from "./auth.service";
+import { registerService, loginService, refreshService, logoutService } from "./auth.service";
 
 // --- ZOD SCHEMAS ---
 const registerSchema = z.object({
@@ -134,6 +134,34 @@ export async function refreshController(req: Request, res: Response) {
     return res.status(401).json({
       success: false,
       message: errorMessage,
+    });
+  }
+}
+
+export async function logoutController(req: Request, res: Response) {
+  try {
+    const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
+
+    if (refreshToken) {
+      // Xóa token khỏi database
+      await logoutService(refreshToken);
+    }
+
+    // Xóa cookie
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Đăng xuất thành công",
+    });
+  } catch (error: unknown) {
+    return res.status(500).json({
+      success: false,
+      message: "Đã xảy ra lỗi khi đăng xuất",
     });
   }
 }
