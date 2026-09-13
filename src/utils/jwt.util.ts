@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 const ACCESS_SECRET = process.env.JWT_SECRET || 'default_access_secret';
 const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'default_refresh_secret';
@@ -20,4 +21,8 @@ export const verifyAccessToken = (token: string): TokenPayload => {
 
 export const verifyRefreshToken = (token: string): TokenPayload => {
   return jwt.verify(token, REFRESH_SECRET) as TokenPayload;
+};
+
+export const hashToken = (token: string): string => {
+  return crypto.createHash('sha256').update(token).digest('hex');
 };

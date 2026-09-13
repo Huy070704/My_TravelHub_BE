@@ -3,7 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import apiRoutes from './routes';
-
+import cookieParser from 'cookie-parser';
 dotenv.config();
 
 const app = express();
@@ -20,6 +20,7 @@ app.get('/api/health', (req: Request, res: Response) => {
 });
 
 // Mount modular routes
+app.use(cookieParser());
 app.use('/api', apiRoutes);
 
 // Start server

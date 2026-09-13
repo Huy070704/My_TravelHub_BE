@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { z } from "zod";
-import { registerService, loginService } from "./auth.service";
+import { registerService, loginService, refreshService } from "./auth.service";
 
 // --- ZOD SCHEMAS ---
 const registerSchema = z.object({
@@ -85,6 +85,49 @@ export async function loginController(req: Request, res: Response) {
     if (error instanceof z.ZodError) {
       errorMessage = error.issues[0].message;
     } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    return res.status(401).json({
+      success: false,
+      message: errorMessage,
+    });
+  }
+}
+
+export async function refreshController(req: Request, res: Response) {
+  try {
+    const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
+
+    if (!refreshToken) {
+      return res.status(401).json({
+        success: false,
+        message: "Không tìm thấy refresh token. Vui lòng đăng nhập lại.",
+      });
+    }
+
+    const data = await refreshService(refreshToken);
+
+    // Tách refreshToken ra khỏi response, dat refresh token thanh newRefreshToken de set vao cookie
+    const { refreshToken: newRefreshToken, ...responseData } = data;
+
+    // Set refreshToken mới vào httpOnly cookie
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, 
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Làm mới token thành công",
+      data: responseData,
+    });
+  } catch (error: unknown) {
+    let errorMessage = "Làm mới token thất bại";
+    
+    if (error instanceof Error) {
       errorMessage = error.message;
     }
 
