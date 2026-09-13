@@ -4,6 +4,7 @@ import { eq, or } from "drizzle-orm";
 import { db } from "./../../db";
 import { users } from "../users/user.schema";
 import { refreshTokens } from "../refreshTokens/refreshToken.schema";
+import { generateTokens, verifyAccessToken, verifyRefreshToken } from "../../utils/jwt.util";
 
 const ACCESS_SECRET = process.env.JWT_SECRET || "default_access_secret";
 const REFRESH_SECRET =
@@ -150,4 +151,32 @@ export async function loginService(input: {
     },
     ...tokens,
   };
+}
+//này được dùng để cấp lại (làm mới) Access Token khi người dùng đã hết hạn phiên đăng nhập tạm thời, giups user không 
+// cần đăng nhập lại bằng username/email và password. Chỉ cần refresh token còn hạn là được cấp lại access token mới
+export async function refreshService(token: string) {
+  // 1. Kiểm tra refresh token có hợp lệ không
+  let payload;
+  try {
+    payload = verifyRefreshToken(token);
+  } catch (error) {
+    throw new Error("Refresh token không hợp lệ hoặc đã hết hạn");
+  }
+
+  // 2. Kiểm tra token có tồn tại trong database không
+  const tokenRecord = await db.query.refreshTokens.findFirst({
+    where: eq(refreshTokens.token, token),
+  });
+
+  if (!tokenRecord) {
+    throw new Error("Refresh token không tồn tại hoặc đã bị thu hồi");
+  }
+
+  // 3. Cấp token mới
+  const tokens = await generateAuthTokens(String(payload.userId), payload.role);
+
+  // 4. Xóa refresh token cũ (xoay vòng token)
+  await db.delete(refreshTokens).where(eq(refreshTokens.tokenId, tokenRecord.tokenId));
+
+  return tokens;
 }
