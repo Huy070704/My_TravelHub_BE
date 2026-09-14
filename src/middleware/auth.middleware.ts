@@ -1,18 +1,20 @@
+import { TokenPayload } from "@/utils/jwt.util";
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 const ACCESS_SECRET = process.env.JWT_SECRET || "default_access_secret";
 
 // Mở rộng kiểu Request của Express để chứa thông tin user sau khi decode
-export interface AuthRequest extends Request {
-  user?: {
-    userId: string;
-    role: string;
-  };
+declare global {
+  namespace Express {
+    interface Request {
+      user?: TokenPayload; // Hoặc { userId: string; role: string }
+    }
+  }
 }
 
 export function authenticateToken(
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) {
