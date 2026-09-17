@@ -8,7 +8,7 @@ const ACCESS_SECRET = process.env.JWT_SECRET || "default_access_secret";
 declare global {
   namespace Express {
     interface Request {
-      user?: TokenPayload; // Hoặc { userId: string; role: string }
+      user?: TokenPayload;
     }
   }
 }
@@ -62,4 +62,24 @@ export function authenticateToken(
         : "Access Token không hợp lệ",
     });
   }
+}
+
+export function authorizeRoles(...allowedRoles: string[]) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user || !req.user.role) {
+      return res.status(403).json({
+        success: false,
+        message: "Bạn không có quyền thực hiện hành động này",
+      });
+    }
+
+    if (!allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        message: "Bạn không có quyền thực hiện hành động này",
+      });
+    }
+
+    next();
+  };
 }
